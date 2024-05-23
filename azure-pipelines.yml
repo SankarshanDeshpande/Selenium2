@@ -26,8 +26,18 @@ steps:
       # Extract ChromeDriver
       Expand-Archive -Path chromedriver_win32.zip -DestinationPath .\
 
-      # Move chromedriver.exe to a directory in PATH
-      Move-Item -Path .\chromedriver.exe -Destination D:/RAIT
+      # Check if the file already exists in the destination directory
+
+      $destinationPath = "C:\Users\sanka\Desktop\chromedriver.exe"
+      if (Test-Path $destinationPath) {
+        # File already exists, rename or delete it
+        Rename-Item -Path $destinationPath -NewName "chromedriver_old.exe"
+        # Or: Remove-Item -Path $destinationPath
+        }
+
+      # Move the chromedriver.exe file to the destination directory
+      Move-Item -Path .\chromedriver.exe -Destination $destinationPath
+
     displayName: 'Download and install ChromeDriver'
 
   - script: |
