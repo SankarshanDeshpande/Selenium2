@@ -31,8 +31,8 @@ steps:
       $destinationPath = "C:\Users\sanka\Desktop\chromedriver.exe"
       if (Test-Path $destinationPath) {
         # File already exists, rename or delete it
-        Rename-Item -Path $destinationPath -NewName "chromedriver_old.exe"
-        # Or: Remove-Item -Path $destinationPath
+        # Rename-Item -Path $destinationPath -NewName "chromedriver_old.exe"
+        Remove-Item -Path $destinationPath
         }
 
       # Move the chromedriver.exe file to the destination directory
