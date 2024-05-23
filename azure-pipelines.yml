@@ -27,7 +27,7 @@ steps:
       Expand-Archive -Path chromedriver_win32.zip -DestinationPath .\
 
       # Move chromedriver.exe to a directory in PATH
-      Move-Item -Path .\chromedriver.exe -Destination C:\Windows\System32\
+      Move-Item -Path .\chromedriver.exe -Destination C:\Users\sanka\Desktop
     displayName: 'Download and install ChromeDriver'
 
   - script: |
