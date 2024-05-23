@@ -1,39 +1,55 @@
+# Trigger the pipeline on pushes to the main branch
 trigger:
-- main
+  branches:
+    include:
+      - main
 
+# Define the pool of agents to run the pipeline
 pool:
   vmImage: 'ubuntu-latest'
 
+# Define the steps of the pipeline
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.x'
-    addToPath: true
+  # Step to check out the repository
+  - checkout: self
 
-- script: |
-    python -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+  # Step to set up Python environment
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
 
-- script: |
-    wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_linux64.zip
-    unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
-  displayName: 'Download and install ChromeDriver'
+  # Step to install dependencies
+  - script: |
+      python -m venv venv
+      source venv/bin/activate
+      pip install -r requirements.txt
+    displayName: 'Install dependencies'
 
-- script: |
-    source venv/bin/activate
-    pytest --html=report.html --self-contained-html
-  displayName: 'Run tests'
+  # Step to download and install ChromeDriver
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y wget unzip
+      wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_linux64.zip
+      unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+    displayName: 'Download and install ChromeDriver'
 
-- task: PublishTestResults@2
-  inputs:
-    testResultsFiles: '**/TEST-*.xml'
-    mergeTestResults: true
-    testRunTitle: 'Python Selenium Tests'
+  # Step to run tests
+  - script: |
+      source venv/bin/activate
+      pytest --html=report.html --self-contained-html
+    displayName: 'Run tests'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: 'report.html'
-    ArtifactName: 'TestReport'
-  displayName: 'Publish test report'
+  # Step to publish test results
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/TEST-*.xml'
+      mergeTestResults: true
+      testRunTitle: 'Python Selenium Tests'
+
+  # Step to publish test report as build artifact
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'report.html'
+      ArtifactName: 'TestReport'
+    displayName: 'Publish test report'
