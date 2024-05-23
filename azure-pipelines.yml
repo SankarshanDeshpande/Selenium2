@@ -11,10 +11,7 @@ pool:
 steps:
   - checkout: self
 
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.x'
-      addToPath: true
+  # No need to set up Python if it's already installed on the agent
 
   - script: |
       python -m venv venv
@@ -24,7 +21,8 @@ steps:
 
   - script: |
       curl -O https://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_win32.zip
-      tar -xvf chromedriver_win32.zip -C /usr/local/bin/
+      tar -xvf chromedriver_win32.zip -C .
+      move chromedriver.exe /usr/local/bin/
     displayName: 'Download and install ChromeDriver'
 
   - script: |
