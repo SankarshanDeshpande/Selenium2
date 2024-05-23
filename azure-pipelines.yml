@@ -53,6 +53,7 @@ steps:
 
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: 'report.html'
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/report.html'
       ArtifactName: 'TestReport'
     displayName: 'Publish test report'
+
