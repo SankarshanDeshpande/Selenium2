@@ -19,10 +19,15 @@ steps:
       pip install -r requirements.txt
     displayName: 'Install dependencies'
 
-  - script: |
-      curl -O https://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_win32.zip
-      tar -xvf chromedriver_win32.zip -C .
-      move chromedriver.exe /usr/local/bin/
+  - powershell: |
+      # Download ChromeDriver
+      Invoke-WebRequest -Uri https://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_win32.zip -OutFile chromedriver_win32.zip
+
+      # Extract ChromeDriver
+      Expand-Archive -Path chromedriver_win32.zip -DestinationPath .\
+
+      # Move chromedriver.exe to a directory in PATH
+      Move-Item -Path .\chromedriver.exe -Destination C:\Windows\System32\
     displayName: 'Download and install ChromeDriver'
 
   - script: |
