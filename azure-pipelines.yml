@@ -47,9 +47,9 @@ steps:
 
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '**/TEST-*.xml'
-      mergeTestResults: true
-      testRunTitle: 'Python Selenium Tests'
+      testResultsFiles: '**/test-results.xml'  # Adjust the pattern to match your test result files
+      testRunTitle: 'Test Results'
+
 
   - task: PublishBuildArtifacts@1
     inputs:
